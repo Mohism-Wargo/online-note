@@ -27,6 +27,14 @@
 </template>
 
 <script>
+
+import Auth from '@/apis/auth'
+
+Auth.getInfo()
+.then(data=>{
+    console.log(data)
+})
+
 export default {
     name:'login',
     data(){
@@ -57,7 +65,6 @@ export default {
             this.isShowRegister = true
         },
         onLogin(){
-            console.log('login')
             let result1 = this.validUsername(this.login.username)
             if (!result1.isValid) {
                 this.login.isError = true
@@ -70,9 +77,17 @@ export default {
                 this.login.notice = result2.notice
                 return
             }
+            this.login.isError = false
+            this.login.notice = ''
+            console.log(`start login..., username: ${this.login.username} , password: ${this.login.password}`)
+            Auth.login({
+                username: this.login.username,
+                password: this.login.password
+            }).then(data => {
+                console.log(data)
+             })              
         },
          onRegister() {
-            console.log('register...')
             let result1 = this.validUsername(this.register.username)
             if(!result1.isValid){
                 this.register.isError = true
@@ -85,6 +100,15 @@ export default {
                  this.register.notice = result2.notice
                  return
              }
+             this.register.isError = false
+             this.register.notice = ''
+             console.log(`start register..., username: ${this.register.username}, password: ${this.register.password}`)
+             Auth.register({
+                 username: this.register.username,
+                  password: this.register.password 
+                }).then(data => {
+                   console.log(data)
+                }) 
         },
         validUsername(username){
             return{
@@ -94,8 +118,8 @@ export default {
         },
         validPassword(password) {
             return {
-                isValid: /^.{8,16}$/.test(password),
-                notice: '密码长度为8~16个字符'
+                isValid: /^.{6,16}$/.test(password),
+                notice: '密码长度为6~16个字符'
             }
         }
     }
