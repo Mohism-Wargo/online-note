@@ -1,6 +1,6 @@
 <template>
     <div id="note" class="detail">
-        <note-sidebar $update:notes="val => notes = val"></note-sidebar>
+        <note-sidebar @update:notes="val => notes = val"></note-sidebar>
         <div class="note-detail">
             <div class="note-empty" v-show="!curNote.id">请选择笔记</div>
             <div v-show="curNote.id">

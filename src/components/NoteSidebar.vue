@@ -36,7 +36,7 @@ export default {
         Notebooks.getAll()
             .then(res => {
                 this.notebooks = res.data
-                this.curBook = this.notebooks.find(notebook => notebook.id == this.$route.query.notebookId)
+                this.curBook = this.notebooks.find(notebook => notebook.id === this.$route.query.notebookId)
                     || this.notebooks[0] || {}
                 return Notes.getAll({ notebookId: this.curBook.id })
             }).then(res => {
@@ -56,10 +56,10 @@ export default {
 
     methods: {
         handleCommand(notebookId) {
-            if (notebookId == 'trash') {
+            if (notebookId === 'trash') {
                 return this.$router.push({ path: '/trash' })
             }
-            this.curBook = this.notebooks.find(notebook => notebook.id == notebookId)
+            this.curBook = this.notebooks.find(notebook => notebook.id === notebookId)
             Notes.getAll({ notebookId })
                 .then(res => {
                     this.notes = res.data

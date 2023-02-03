@@ -3,7 +3,7 @@ import { friendlyDate } from '@/helpers/util'
 
 const URL = {
     GET: '/notes/from/:notebookId',
-    ADD: '/note/to/:notebookId',
+    ADD: '/notes/to/:notebookId',
     UPDATE: '/notes/:noteId',
     DELETE: '/notes/:noteId'
 }
@@ -18,7 +18,7 @@ export default {
                         note.updatedAtFriendly = friendlyDate(note.updateAt)
                         return note
                     }).sort((note1, note2) => {
-                        return note1.updatedAt < note2.updateAt
+                        return note1.updatedAt < note2.updatedAt
                     })
                     resolve(res)
                 }).catch(err => {
@@ -40,7 +40,7 @@ export default {
             request(URL.ADD.replace(':notebookId', notebookId), 'POST', { title, content })
                 .then(res => {
                     res.data.createdAtFriendly = friendlyDate(res.data.createdAt)
-                    res.data.updatedAtFriendly = friendlyDate(res.data.updateAt)
+                    res.data.updatedAtFriendly = friendlyDate(res.data.updatedAt)
                     resolve(res)
                 }).catch(err => {
                     reject(err)
