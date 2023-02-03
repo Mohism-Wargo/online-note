@@ -1,5 +1,6 @@
 import axios from 'axios'
 import baseURLConfig from './config-baseURL'
+import { Message } from 'element-ui'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-ww-form-urlencoded'
 // axios.defaults.baseURL = 'https://note-server.hunger-valley.com'
@@ -24,12 +25,17 @@ export default function request(url, type = 'GET', data = {}) {
             if (res.status === 200) {
                 resolve(res.data)
             } else {
-                console.error(res.data)
+                Message.error(res.data.msg)
                 reject(res.data)
             }
         }).catch(err => {
-            console.error({ msg: '网络异常' })
+            Message.error('网络异常')
             reject({ msg: '网络异常' })
         })
     })
 }
+
+// request('/auth/login', 'POST', {username: 'hunger', password: '123456'})
+//   .then(data=>{
+//     console.log(data)
+//   })

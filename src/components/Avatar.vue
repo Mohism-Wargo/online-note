@@ -1,19 +1,35 @@
 <template>
-     <span :title="user.username">{{ slug }}</span>
+     <span :title="username">{{ slug }}</span>
     </template>
 
 <script>
+import Auth from '@/apis/auth'
+import Bus from '@/helpers/bus'
 
       export default {
  data() {
           return {
- user: {
-                 username: 'Mr.White'
-                    },
-           slug: 'W'
-             }
+            username: '未登录'
     }
+ },
+ created() {
+    Bus.$on('userInfo',user => {
+        this.username = user.username
+    })
+    Auth.getInfo()
+      .then(res => {
+        if(res.isLogin) {
+            this.username = res.data.username
+        }
+      })
+ },
+ computed: {
+    slug() {
+        return this.username.charAt(0)
+    }
+  }
  }
+
 </script>
 
 <style scoped>
@@ -29,7 +45,7 @@ span {
     text-shadow: 1px 0 1px #243d36;
     font-weight: bold;
     text-transform: uppercase;
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 20px;
     
 }

@@ -9,14 +9,14 @@
                         <div v-show="isShowLogin" class="login">
                             <input type="text" v-model="login.username" placeholder="输入用户名">
                             <input type="password" v-model="login.password" placeholder="密码">
-                            <p v-bind:class="{Error:login.isError}">{{ login.notice }}</p>
+                            <p v-bind:class="{error:login.isError}">{{ login.notice }}</p>
                             <div class="button" @click="onLogin"> 登录</div>  
                         </div>
                         <h3 @click="showRegister">注册</h3>
                         <div v-show="isShowRegister" class="register">
                              <input type="text" v-model="register.username" placeholder="用户名">
                              <input type="password" v-model="register.password" placeholder="密码">
-                            <p v-bind:class="{ Error: register.isError}">{{ register.notice }}</p>
+                            <p v-bind:class="{ error: register.isError}">{{ register.notice }}</p>
                              <div class="button" @click="onRegister">注册</div>    
                         </div>
                         </div>
@@ -29,11 +29,12 @@
 <script>
 
 import Auth from '@/apis/auth'
+import Bus from '@/helpers/bus'
 
-Auth.getInfo()
-.then(data=>{
-    console.log(data)
-})
+// Auth.getInfo()
+// .then(data=>{
+//     console.log(data)
+// })
 
 export default {
     name:'login',
@@ -77,15 +78,19 @@ export default {
                 this.login.notice = result2.notice
                 return
             }
-            this.login.isError = false
-            this.login.notice = ''
-            console.log(`start login..., username: ${this.login.username} , password: ${this.login.password}`)
+
             Auth.login({
                 username: this.login.username,
                 password: this.login.password
             }).then(data => {
-                console.log(data)
-             })              
+                this.login.isError = false
+                this.login.notice = ''
+                Bus.$emit('userInfo', {username: this.login.username})
+                this.$router.push({ path:'notebooks'})
+             }) .catch(data => {
+                this.login.isError = true
+                this.login.notice = data.msg
+             })             
         },
          onRegister() {
             let result1 = this.validUsername(this.register.username)
@@ -100,14 +105,18 @@ export default {
                  this.register.notice = result2.notice
                  return
              }
-             this.register.isError = false
-             this.register.notice = ''
-             console.log(`start register..., username: ${this.register.username}, password: ${this.register.password}`)
+            //  console.log(`start register..., username: ${this.register.username}, password: ${this.register.password}`)
              Auth.register({
                  username: this.register.username,
                   password: this.register.password 
                 }).then(data => {
-                   console.log(data)
+                    this.register.isError = false
+                    this.register.notice = ''
+                    Bus.$emit('userInfo', { username: this.register.username })
+                    this.$router.push({ path: 'notebooks' })
+                }).catch( data=>{
+                    this.register.isError = true
+                    this.register.notice = data.msg
                 }) 
         },
         validUsername(username){
@@ -134,7 +143,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(90, 112, 110, 0.4);
+    background-color: rgba(90, 112, 110, 0.5);
     display: table;
     transition: opacity .3s ease;
     

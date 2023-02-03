@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "element-ui": "^2.15.12",
+    "markdown-it": "^13.0.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
