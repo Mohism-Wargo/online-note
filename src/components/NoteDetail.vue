@@ -15,8 +15,8 @@
                     <input type="text" v-model="curNote.title"  @input="updateNote" @keydown="statusText ='正在输入...'" placeholder="请输入标题">
                 </div>
                 <div class="note-editor">
-                    <textarea v-show="true" v-model="curNote.content" @input="updateNote" @keydown="statusText ='正在输入...'"  placeholder="请输入内容，支持 Markdown 语法"></textarea>
-                    <div class="preview markdown-body" v-html="previewContent " v-show="!isShowPreview"></div>
+                    <textarea v-if="!isShowPreview" v-model="curNote.content" @input="updateNote" @keydown="statusText ='正在输入...'"  placeholder="请输入内容，支持 Markdown 语法"></textarea>
+                    <div class="preview markdown-body" v-html="previewContent " v-else></div>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@ export default {
                 }
             })
         Bus.$once('update:notes', val => {
-            this.curNote = val.find(note => note.id === this.$route.query.noteId) || {}
+            this.curNote = val.find(note => String(note.id) === String(this.$route.query.noteId)) || {}
         })
     },
 
@@ -84,7 +84,7 @@ export default {
     },
 
     beforeRouteUpdate (to, from, next) {
-        this.curNote = this.notes.find(note => note.id === to.query.noteId) || {}
+        this.curNote = this.notes.find(note => String(note.id) === String(to.query.noteId)) || {}
         next()
     }
 }

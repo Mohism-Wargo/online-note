@@ -1,11 +1,11 @@
 <template>
     <div class="detail" id="notebook-list">
         <header>
-            <a href="#" class="btn" @click.prevent="onCreate"><i class="iconfont icon-plus"></i> 创建笔记</a>
+            <a href="#" class="btn" @click.prevent="onCreate"><i class="iconfont icon-plus"></i> 创建笔记本</a>
         </header>
         <main>
             <div class="layout">
-                <h3>笔记目录({{ notebooks.length }})</h3>
+                <h3>笔记本目录({{ notebooks.length }})</h3>
                 <div class="book-list">
                     <router-link v-for="notebook in notebooks" :key="notebook.id" :to="'/note?notebookId = ${notebook.id}'" class="notebook">
                         <div>
@@ -50,7 +50,7 @@ export default {
     methods: {
         onCreate() {
             
-            this.$prompt('请输入新的笔记标题', '创建笔记' , {
+            this.$prompt('请输入新的笔记本标题', '创建笔记本' , {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 inputPattern: /^.{1,30}$/ ,
@@ -62,25 +62,12 @@ export default {
                 this.notebooks.unshift(res.data)
                 this.$message.success(res.msg)
             })
-
-            // let title = window.prompt('创建笔记')
-            // if (title.trim() === '') {
-            //     alert('笔记名不能为空')
-            //     return
-            // }
-            // Notebooks.addNotebook({ title })
-            //     .then(res => {
-            //         console.log(res)
-            //         res.data.friendlyCreatedAt = friendlyDate(res.data.createdAt)
-            //         this.notebooks.unshift(res.data)
-            //         alert(res.msg)
-            //     })
         },
 
         onEdit(notebook) {
 
             let title = ''
-            this.$prompt('输入新笔记的标题', '修改笔记名' , {
+            this.$prompt('输入新笔记本标题', '修改笔记本名' , {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 inputPattern: /^.{1,30}$/,
@@ -93,18 +80,11 @@ export default {
                 notebook.title = title
                 this.$message.success(res.msg)
             })
-
-            // let title = window.prompt('修改笔记标题', notebook.title)
-            // Notebooks.updateNotebook(notebook.id, { title })
-            //     .then(res => {
-            //         notebook.title = title
-            //         alert(res.msg)
-            //     })
         },
 
         onDelete(notebook) {
 
-            this.$confirm('确定要删除这个笔记吗？', '删除笔记',{
+            this.$confirm('确定要删除这个笔记本吗？', '删除笔记本',{
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -114,17 +94,6 @@ export default {
                 this.notebooks.splice(this.notebooks.indexOf(notebook),1)
                 this.$message.success(res.msg)
             })
-
-            // console.log('delete', notebook)
-            // let isConfirm = window.confirm('你确定要删除吗?')
-            // if (isConfirm) {
-            //     Notebooks.deleteNotebook(notebook.id)
-            //         .then(res => {
-            //             console.log(res)
-            //             this.notebooks.splice(this.notebooks.indexOf(notebook), 1)
-            //             alert(res.msg)
-            //         })
-            // }
         }
     }
 }
