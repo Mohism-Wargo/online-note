@@ -8,14 +8,14 @@
                         <h3 @click="showLogin">登录</h3>
                         <div v-show="isShowLogin" class="login">
                             <input type="text" v-model="login.username" placeholder="输入用户名">
-                            <input type="password" v-model="login.password" placeholder="密码">
+                            <input type="password" v-model="login.password" @keyup.enter="onLogin"  placeholder="密码">
                             <p v-bind:class="{error:login.isError}">{{ login.notice }}</p>
                             <div class="button" @click="onLogin"> 登录</div>  
                         </div>
                         <h3 @click="showRegister">注册</h3>
                         <div v-show="isShowRegister" class="register">
                              <input type="text" v-model="register.username" placeholder="用户名">
-                             <input type="password" v-model="register.password" placeholder="密码">
+                             <input type="password" v-model="register.password" @keyup.enter="onRegister" placeholder="密码">
                             <p v-bind:class="{ error: register.isError}">{{ register.notice }}</p>
                              <div class="button" @click="onRegister">注册</div>    
                         </div>
@@ -28,16 +28,9 @@
 
 <script>
 
-import Auth from '@/apis/auth'
-import Bus from '@/helpers/bus'
-
-// Auth.getInfo()
-// .then(data=>{
-//     console.log(data)
-// })
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-    name:'login',
     data(){
         return{
             isShowLogin:true,
@@ -51,20 +44,27 @@ export default {
             register: {
                 username: '',
                 password: '',
-                notice: '请记住您创建的账号和密码！',
+                notice: '请记住您所创建的账号和密码！',
                 isError: false
             }
         }
     },
     methods:{
+        ...mapActions({
+            loginUser: 'login',
+            registerUser: 'register'
+        }),
+
         showLogin(){
             this.isShowLogin = true
             this.isShowRegister = false
         },
+
         showRegister() {    
             this.isShowLogin = false
             this.isShowRegister = true
         },
+
         onLogin(){
             let result1 = this.validUsername(this.login.username)
             if (!result1.isValid) {
@@ -79,19 +79,19 @@ export default {
                 return
             }
 
-            Auth.login({
+            this.loginUser({
                 username: this.login.username,
                 password: this.login.password
-            }).then(data => {
+            }).then(() => {
                 this.login.isError = false
                 this.login.notice = ''
-                Bus.$emit('userInfo', {username: this.login.username})
                 this.$router.push({ path:'notebooks'})
              }) .catch(data => {
                 this.login.isError = true
                 this.login.notice = data.msg
              })             
         },
+
          onRegister() {
             let result1 = this.validUsername(this.register.username)
             if(!result1.isValid){
@@ -105,26 +105,26 @@ export default {
                  this.register.notice = result2.notice
                  return
              }
-            //  console.log(`start register..., username: ${this.register.username}, password: ${this.register.password}`)
-             Auth.register({
+             this.registerUser({
                  username: this.register.username,
                   password: this.register.password 
-                }).then(data => {
+                }).then(() => {
                     this.register.isError = false
                     this.register.notice = ''
-                    Bus.$emit('userInfo', { username: this.register.username })
                     this.$router.push({ path: 'notebooks' })
                 }).catch( data=>{
                     this.register.isError = true
                     this.register.notice = data.msg
                 }) 
         },
+
         validUsername(username){
             return{
                 isValid:/^[a-zA-Z_0-9\u4e00-\u9fa5]{3,15}$/.test(username),
                 notice:'用户名必须是3~15个字符，仅限于字母数字下划线及中文'
             }
         },
+
         validPassword(password) {
             return {
                 isValid: /^.{6,16}$/.test(password),

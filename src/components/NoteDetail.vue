@@ -2,8 +2,9 @@
     <div id="note" class="detail">
         <note-sidebar @update:notes="val => notes = val"></note-sidebar>
         <div class="note-detail">
-            <div class="note-empty" v-show="!curNote.id">请选择笔记</div>
-            <div v-show="curNote.id">
+            <div class="note-empty" v-show="!curBook.id">请创建笔记本后</div>
+            <div class="note-empty" v-show="!curNote.id">选择或创建笔记</div>
+            <div class="note-detail-ct" v-show="curNote.id">
                 <div class="note-bar">
                     <span>创建日期：{{ curNote.createdAtFriendly }}</span>
                     <span>更新日期：{{ curNote.updatedAtFriendly }}</span>
@@ -14,8 +15,9 @@
                 <div class="note-title">
                     <input type="text" v-model="curNote.title"  @input="updateNote" @keydown="statusText ='正在输入...'" placeholder="请输入标题">
                 </div>
-                <div class="note-editor">
-                    <textarea v-if="!isShowPreview" v-model="curNote.content" @input="updateNote" @keydown="statusText ='正在输入...'"  placeholder="请输入内容，支持 Markdown 语法"></textarea>
+                <div class="editor">
+                    <codemirror v-model="curNote.content" :options="cmOptions" v-if="!isShowPreview" @input="onUpdateNote" @inputRead="statusText='正在输入...'"></codemirror>
+                    <!-- <textarea v-if="!isShowPreview" v-model="curNote.content" @input="updateNote" @keydown="statusText ='正在输入...'"  placeholder="请输入内容，支持 Markdown 语法"></textarea> -->
                     <div class="preview markdown-body" v-html="previewContent " v-else></div>
                 </div>
             </div>
@@ -24,46 +26,63 @@
 </template>
 
 <script>
-import Auth from '@/apis/auth'
 import NoteSidebar from '@/components/NoteSidebar'
-import Bus from '@/helpers/bus'
 import _ from 'lodash'
-import Notes from '@/apis/notes'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import MarkdownIt from 'markdown-it'
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/mode/markdown/markdown.js'
+import 'codemirror/theme/neat.css'
 
 let md = new MarkdownIt()
 
 export default {
     components:{
-        NoteSidebar
+        NoteSidebar,
+        codemirror
     },
     data() {
         return {
-            curNote: {},
-            notes: [],
             statusText:'笔记未编辑',
-            isShowPreview: false
+            isShowPreview: false,
+            cmOptions: {
+                tabSize: 4,
+                mode: 'text/x-markdown',
+                theme: 'neat',
+                lineNumbers: false,
+                line: true,
+                // more codemirror options, 更多 codemirror 的高级配置...
+            }
         }
     },
     created() {
-        Auth.getInfo()
-            .then(res => {
-                if (!res.isLogin) {
-                    this.$router.push({ path: '/login' })
-                }
-            })
-        Bus.$once('update:notes', val => {
-            this.curNote = val.find(note => String(note.id) === String(this.$route.query.noteId)) || {}
-        })
+        this.checkLogin({ path: '/login' })
     },
 
     computed: {
+        ...mapGetters([
+            'notes',
+            'curNote',
+            'curBook'
+        ]),
+
         previewContent() {
             return md.render(this.curNote.content || '')
         }
     },
 
     methods: {
+        ...mapMutations([
+            'setCurNote'
+        ]),
+
+        ...mapActions([
+            'updateNote',
+            'deleteNote',
+            'checkLogin'
+        ]),
+
         updateNote: _.debounce(function() {
             Notes.updateNote({ noteId:this.curNote.id },
             { title: this.curNote.title, content: this.curNote.content })
@@ -72,19 +91,18 @@ export default {
             }).catch(data => {
                 this.statusText = '保存失败'
             })
-        }, 300),
+        }, 3000),
+
         deleteNote() {
-            Notes.deleteNote({ noteId: this.curNote.id })
+            this.deleteNote({ noteId: this.curNote.id })
               .then(data => {
-                this.$message.success(data.msg)
-                this.notes.splice(this.notes.indexOf(this.curNote),1)
                 this.$router.replace({ path: '/note ' })
               })
         }
     },
 
     beforeRouteUpdate (to, from, next) {
-        this.curNote = this.notes.find(note => String(note.id) === String(to.query.noteId)) || {}
+        this.setCurNote({ curNoteId: to.query.noteId})
         next()
     }
 }
