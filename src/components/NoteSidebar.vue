@@ -1,8 +1,8 @@
 <template>
     <div class="note-sidebar">
-        <span class="btn add-note" @click="addNote">添加笔记</span>
+        <span v-if="curBook.id" class="btn add-note" @click="onAddNote">添加笔记</span>
         <span v-if="!curBook.id" class="notebook-title">暂无笔记</span>
-        <el-dropdown class="notebook-title" @command="handleCommand" placement="bottom">
+        <el-dropdown v-if="curBook.id" class="notebook-title" @command="handleCommand" placement="bottom">
             <span class="el-dropdown-link">
                 {{ curBook.title }} <i class="iconfont icon-down"></i>
             </span>
@@ -28,16 +28,17 @@
 </template>
 
 <script>
+
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
     created() {
         this.getNotebooks()
           .then(() => {
-            this.setCurBook({ curBookId: this.$router.query.notebookId})
+            this.setCurBook({ curBookId: this.$route.query.notebookId})
             if(this.curBook.id) return this.getNotes({ notebookId: this.curBook.id})
           }).then(() => {
-            this.setCurNote({ curNoteId: this.$router.query.noteId })
+            this.setCurNote({ curNoteId: this.$route.query.noteId })
             this.$router.replace({
                 path: '/note',
                 query: {
@@ -90,7 +91,7 @@ export default {
             })
         },
 
-        addNote() {
+       onAddNote() {
             this.addNote({ notebookId: this.curBook.id })
         }
 

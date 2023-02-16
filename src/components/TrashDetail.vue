@@ -17,11 +17,11 @@
         </div>
         <div class="note-detail">
             <div class="note-bar" v-if="true">
-                <span> 所属笔记本: {{ curTrashNote.createdAtFriendly }}</span>
+                <span> 所属笔记本: {{ belongTo }} </span>
                 <span> | </span>
-                <span> 创建日期: {{ curTrashNote.updatedAtFriendly }}</span>
+                <span> 创建日期: {{ curTrashNote.createdAtFriendly }}</span>
                 <span> | </span>
-                <span> 更新日期: {{ belongTo }}</span>
+                <span> 更新日期: {{ curTrashNote.updatedAtFriendly }}</span>
 
                 <a class="btn action" @click="onRevert">恢复</a>
                 <a class="btn action" @click="onDelete">彻底删除</a>
@@ -37,7 +37,11 @@
 </template>
 
 <script>
-import Auth from '@/apis/auth'
+
+import MarkdownIt from 'markdown-it'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
+
+let md = new MarkdownIt()
 
 export default {
     data() {
@@ -49,7 +53,7 @@ export default {
         this.getNotebooks()
         this.getTrashNotes()
           .then(() => {
-                this.setCurTrashNote({ curTrashNoteId: this.$router.query.noteId})
+                this.setCurTrashNote({ curTrashNoteId: this.$route.query.noteId})
                 this.$router.replace({
                     path: '/trash',
                     query: { noteId: this.curTrashNote.id }
@@ -84,12 +88,13 @@ export default {
 
         onDelete() {
             this.$confirm('笔记删除后将无法恢复', '确定要删除吗？', {
-                confirmButtonText: '删除',
+                confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
                 return this.deleteTrashNote({ noteId: this.curTrashNote.id})
             }).then(() => {
+                console.log('delete success')
                 this.setCurTrashNote()
                 this.$router.replace({
                     path: '/trash',

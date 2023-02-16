@@ -22,7 +22,7 @@ const getters = {
 
 const mutations = {
     setTrashNotes(state, payload) {
-        state.trashNote = payload.trashNotes
+        state.trashNotes = payload.trashNotes
     },
 
     addTrashNote(state, payload) {

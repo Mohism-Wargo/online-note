@@ -9,11 +9,11 @@
                     <span>创建日期：{{ curNote.createdAtFriendly }}</span>
                     <span>更新日期：{{ curNote.updatedAtFriendly }}</span>
                     <span>{{ statusText }}</span>
-                    <span class="iconfont icon-delete" @click="deleteNote"></span>
+                    <span class="iconfont icon-delete" @click="onDeleteNote"></span>
                     <span class="iconfont icon-fullscreen" @click="isShowPreview = !isShowPreview"></span>
                 </div>
                 <div class="note-title">
-                    <input type="text" v-model="curNote.title"  @input="updateNote" @keydown="statusText ='正在输入...'" placeholder="请输入标题">
+                    <input type="text" v-model="curNote.title"  @input="onUpdateNote" @keydown="statusText ='正在输入...'" placeholder="请输入标题">
                 </div>
                 <div class="editor">
                     <codemirror v-model="curNote.content" :options="cmOptions" v-if="!isShowPreview" @input="onUpdateNote" @inputRead="statusText='正在输入...'"></codemirror>
@@ -42,6 +42,7 @@ export default {
         NoteSidebar,
         codemirror
     },
+    
     data() {
         return {
             statusText:'笔记未编辑',
@@ -83,9 +84,9 @@ export default {
             'checkLogin'
         ]),
 
-        updateNote: _.debounce(function() {
-            Notes.updateNote({ noteId:this.curNote.id },
-            { title: this.curNote.title, content: this.curNote.content })
+        onUpdateNote: _.debounce(function() {
+            if(!this.curNote.id) return
+            this.updateNote({ noteId: this.curNote.id, title: this.curNote.title, content: this.curNote.content})
             .then(data => {
                 this.statusText = '已保存'
             }).catch(data => {
@@ -93,7 +94,7 @@ export default {
             })
         }, 3000),
 
-        deleteNote() {
+        onDeleteNote() {
             this.deleteNote({ noteId: this.curNote.id })
               .then(data => {
                 this.$router.replace({ path: '/note ' })

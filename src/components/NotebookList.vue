@@ -38,7 +38,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['notebook'])
+        ...mapGetters(['notebooks'])
     },
 
     methods: {
@@ -70,7 +70,7 @@ export default {
                 inputValue: notebook.title,
                 inputErrorMessage: '标题不能为空，且不超过30个字符！'
             }).then(({ value }) => {
-                this.updateNotebook( {notebookId: notebook.id}, { title: value })
+                this.updateNotebook( {notebookId: notebook.id, title: value })
             })
         },
 
