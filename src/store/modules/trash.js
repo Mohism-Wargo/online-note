@@ -11,7 +11,7 @@ const getters = {
 
     curTrashNote: (state, getters) => {
         if (!state.curTrashNoteId) return getters.trashNotes[0] || {}
-        return state.trashNote.find(note => note.id == state.curTrashNoteId) || {}
+        return state.trashNotes.find(note => note.id == state.curTrashNoteId) || {}
     },
 
     belongTo: (state, getters, rootState, rootGetters) => {

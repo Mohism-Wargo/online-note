@@ -7,8 +7,8 @@
                 {{ curBook.title }} <i class="iconfont icon-down"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="notebook in notebooks"
-                    :command="notebook.id" :key="notebook.id">{{ notebook.title }}</el-dropdown-item>
+                <el-dropdown-item v-for="notebook in notebooks" :key="notebook.id"
+                    :command="notebook.id" >{{ notebook.title }}</el-dropdown-item>
                 <el-dropdown-item command="trash">回收站</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
@@ -39,6 +39,7 @@ export default {
             if(this.curBook.id) return this.getNotes({ notebookId: this.curBook.id})
           }).then(() => {
             this.setCurNote({ curNoteId: this.$route.query.noteId })
+            console.log(this.$route.query)
             this.$router.replace({
                 path: '/note',
                 query: {

@@ -16,7 +16,7 @@
                     <input type="text" v-model="curNote.title"  @input="onUpdateNote" @keydown="statusText ='正在输入...'" placeholder="请输入标题">
                 </div>
                 <div class="editor">
-                    <codemirror v-model="curNote.content" :options="cmOptions" v-if="!isShowPreview" @input="onUpdateNote" @inputRead="statusText='正在输入...'"></codemirror>
+                    <codemirror v-model="curNote.content" :options="cmOptions" v-if="!isShowPreview" @input="onUpdateNote" @inputRead="statusText='正在输入...'" ></codemirror>
                     <!-- <textarea v-if="!isShowPreview" v-model="curNote.content" @input="updateNote" @keydown="statusText ='正在输入...'"  placeholder="请输入内容，支持 Markdown 语法"></textarea> -->
                     <div class="preview markdown-body" v-html="previewContent " v-else></div>
                 </div>
@@ -92,7 +92,7 @@ export default {
             }).catch(data => {
                 this.statusText = '保存失败'
             })
-        }, 3000),
+        }, 400),
 
         onDeleteNote() {
             this.deleteNote({ noteId: this.curNote.id })
@@ -103,7 +103,7 @@ export default {
     },
 
     beforeRouteUpdate (to, from, next) {
-        this.setCurNote({ curNoteId: to.query.noteId})
+        this.setCurNote({ curNoteId: to.query.noteId })
         next()
     }
 }
