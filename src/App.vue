@@ -33,7 +33,7 @@ body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   font-size: 14px;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #eee;
+  background-color: #dce5e7;
   
 }
 a {

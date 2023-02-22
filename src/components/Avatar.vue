@@ -1,6 +1,6 @@
 <template>
      <span :title="username">{{ slug }}</span>
-    </template>
+</template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
@@ -34,18 +34,19 @@ import { mapGetters, mapActions } from 'vuex'
 <style scoped>
 span {
     display: inline-block;
-    width: 30px;
-    height: 30px;
+    width: 56px;
+    height: 54px;
     text-align: center;
-    line-height: 32px;
-    border-radius: 50%;
+    line-height: 62px;
+    border-radius: 24%;
     background: #59c9a7;
-    color: rgb(253, 253, 253);
+    color: #fff;
     text-shadow: 1px 0 1px #243d36;
     font-weight: bold;
     text-transform: uppercase;
-    font-size: 16px;
-    margin-top: 20px;
+    font-size: 14px;
+    margin-top: 12px;
+    border: 2px solid #91b6ce;
     
 }
 </style>

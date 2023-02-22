@@ -7,9 +7,9 @@ const state = {
 }
 
 const getters = {
-    username: state => state.user === null ? '请登录' : state.user.username,
+    username: state => state.user === null ? '请登录...' : state.user.username,
 
-    slug: state => state.user === null ? '未' : state.user.username.charAt(0)
+    slug: state => state.user === null ? '请登录...' : (state.user.username.charAt(0) + state.user.username.charAt(1) + state.user.username.charAt(2) + '...')
 }
 
 const mutations = {
@@ -34,7 +34,7 @@ const actions = {
     },
 
     logout({ commit }, payload = { path: '/login' }) {
-        return Auth.login()
+        return Auth.logout()
             .then(res => {
                 commit('setUser', { user: null })
                 console.log(payload)

@@ -1,19 +1,20 @@
 <template>
     <div class="detail" id="notebook-list">
         <header>
-            <a href="#" class="btn" @click.prevent="onCreate"><i class="iconfont icon-plus"></i> 创建笔记本</a>
+            <a href="#" class="btn" @click.prevent="onCreate"> 添加笔记本</a>
         </header>
         <main>
             <div class="layout">
-                <h3>笔记本目录({{ notebooks.length }})</h3>
+                <h3>笔记本目录  【 {{ notebooks.length }} 】 </h3>
                 <div class="book-list">
-                    <router-link v-for="notebook in notebooks" :key="notebook.id" :to="`/note?notebookId = ${notebook.id}`" class="notebook">
+                    <router-link v-for="notebook in notebooks" :key="notebook.id" :to="`/note?notebookId=${notebook.id}`" class="notebook">
                         <div>
-                            <span class="iconfont icon-notebook"></span> {{ notebook.title }}
-                            <span>{{ notebook.noteCounts }}</span>
+                            <span class="iconfont icon-notebook"></span>
+                             {{ notebook.title }}
+                            <span >{{ notebook.noteCounts }}</span>
                             <span class="action" @click.stop.prevent="onEdit(notebook)">编辑</span>
                             <span class="action" @click.stop.prevent="onDelete(notebook)">删除</span>
-                            <span class="date">{{ notebook.friendlyCreatedAt }}</span>
+                            <span class="date">{{ notebook.createdAtFriendly }}</span>
                         </div>
                     </router-link>
                 </div>
@@ -47,11 +48,11 @@ export default {
             'addNotebook',
             'updateNotebook',
             'deleteNotebook',
-            'checkLogin'
+            'checkLogin',
         ]),
 
         onCreate() {    
-            this.$prompt('请输入新的笔记本标题', '创建笔记本' , {
+            this.$prompt('请输入新的笔记本标题', '添加新笔记本' , {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 inputPattern: /^.{1,30}$/ ,
@@ -70,7 +71,7 @@ export default {
                 inputValue: notebook.title,
                 inputErrorMessage: '标题不能为空，且不超过30个字符！'
             }).then(({ value }) => {
-                this.updateNotebook( {notebookId: notebook.id, title: value })
+                this.updateNotebook({ notebookId: notebook.id, title: value })
             })
         },
 

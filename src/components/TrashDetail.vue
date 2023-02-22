@@ -3,28 +3,26 @@
         <div class="note-sidebar">
             <h3 class="notebook-title">回收站</h3>
             <div class="menu">
-                <div>更新时间</div>
                 <div>标题</div>
+                <div>更新时间</div>
             </div>
             <ul class="notes">
                 <li v-for="note in trashNotes" :key="note.id">
                     <router-link :to="`/trash?noteId=${note.id}`">
-                        <span class="date">{{ note.updatedAtFriendly }}</span>
                         <span class="title">{{ note.title }}</span>
+                        <span class="date">{{ note.updatedAtFriendly }}</span>    
                     </router-link>
                 </li>
             </ul>
         </div>
         <div class="note-detail">
             <div class="note-bar" v-if="true">
-                <span> 所属笔记本: {{ belongTo }} </span>
-                <span> | </span>
-                <span> 创建日期: {{ curTrashNote.createdAtFriendly }}</span>
-                <span> | </span>
-                <span> 更新日期: {{ curTrashNote.updatedAtFriendly }}</span>
+                <span class="status"> 所属笔记本: {{ belongTo }} </span>
+                <span class="status"> 创建日期: {{ curTrashNote.createdAtFriendly }}</span>
+                <span class="status"> 更新日期: {{ curTrashNote.updatedAtFriendly }}</span>
 
-                <a class="btn action" @click="onRevert">恢复</a>
                 <a class="btn action" @click="onDelete">彻底删除</a>
+                <a class="btn action" @click="onRevert">恢复</a>     
             </div>
             <div class="note-title">
                 <span>{{ curTrashNote.title }}</span>
@@ -94,7 +92,6 @@ export default {
             }).then(() => {
                 return this.deleteTrashNote({ noteId: this.curTrashNote.id})
             }).then(() => {
-                console.log('delete success')
                 this.setCurTrashNote()
                 this.$router.replace({
                     path: '/trash',
@@ -135,10 +132,10 @@ export default {
     .note-bar {
         .action {
             float: right;
-            margin-left: 10px;
-            padding: 2px 4px;
-            font-size: 12px;
-
+            margin-left: 2px;
+            padding: 2px 10px;
+            font-size: 14px;
+            font-weight: bold;
         }
     }
 }

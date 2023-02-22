@@ -6,11 +6,11 @@
             <div class="note-empty" v-show="!curNote.id">选择或创建笔记</div>
             <div class="note-detail-ct" v-show="curNote.id">
                 <div class="note-bar">
-                    <span>创建日期：{{ curNote.createdAtFriendly }}</span>
-                    <span>更新日期：{{ curNote.updatedAtFriendly }}</span>
-                    <span>{{ statusText }}</span>
-                    <span class="iconfont icon-delete" @click="onDeleteNote"></span>
-                    <span class="iconfont icon-fullscreen" @click="isShowPreview = !isShowPreview"></span>
+                    <span class="status">创建日期：{{ curNote.createdAtFriendly }}</span>
+                    <span class="status">更新日期：{{ curNote.updatedAtFriendly }}</span>
+                    <span class="status">{{ statusText }}</span>
+                    <span class="action delete" @click="onDeleteNote">删除</span>
+                    <span class="action fullscreen" @click="isShowPreview = !isShowPreview">展示</span>
                 </div>
                 <div class="note-title">
                     <input type="text" v-model="curNote.title"  @input="onUpdateNote" @keydown="statusText ='正在输入...'" placeholder="请输入标题">
@@ -45,7 +45,7 @@ export default {
     
     data() {
         return {
-            statusText:'笔记未编辑',
+            statusText:'笔记未改动',
             isShowPreview: false,
             cmOptions: {
                 tabSize: 4,
@@ -97,7 +97,7 @@ export default {
         onDeleteNote() {
             this.deleteNote({ noteId: this.curNote.id })
               .then(data => {
-                this.$router.replace({ path: '/note ' })
+                this.$router.replace({ path: '/note' })
               })
         }
     },

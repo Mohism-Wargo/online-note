@@ -13,14 +13,14 @@
             </el-dropdown-menu>
         </el-dropdown>
         <div class="menu">
-            <div>更新时间</div>
             <div>标题</div>
+            <div>创建时间</div>   
         </div>
         <ul class="notes">
             <li v-for="note in notes" :key="note.id">
                 <router-link :to="`/note?noteId=${note.id}&notebookId=${curBook.id}`">
-                    <span class="date">{{ note.updatedAtFriendly }}</span>
                     <span class="title">{{ note.title }}</span>
+                    <span class="date">{{ note.createdAtFriendly }}</span>    
                 </router-link>
             </li>
         </ul>
@@ -39,7 +39,6 @@ export default {
             if(this.curBook.id) return this.getNotes({ notebookId: this.curBook.id})
           }).then(() => {
             this.setCurNote({ curNoteId: this.$route.query.noteId })
-            console.log(this.$route.query)
             this.$router.replace({
                 path: '/note',
                 query: {

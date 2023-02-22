@@ -2,14 +2,14 @@
     <div id="sidebar">
         <avatar/>
         <div class="icons">
-            <router-link to="/note" title="笔记目录"><i class="iconfont icon-note"></i></router-link>
-            <router-link to="/notebooks" title="笔记详情"><i class="iconfont icon-notebook"></i></router-link>
+            <router-link to="/note" title="笔记详情"><i class="iconfont icon-note"></i></router-link>
+            <router-link to="/notebooks" title="笔记目录"><i class="iconfont icon-notebook"></i></router-link>
             <router-link to="/trash" title="回收站"><i class="iconfont icon-trash"></i></router-link>
-            </div>
-         <div class="logout">
+        </div>
+        <div class="logout">
              <i class="iconfont icon-logout" @click="onLogout"></i>
-             </div>
-         </div>
+        </div>
+    </div>
     </template>
 
 <script> 
@@ -35,19 +35,19 @@ export default {
 <style lang="less" scoped>
 #sidebar {
 position: relative;
-width: 86px;
+width: 90px;
 text-align: center;
 background-color: #4491a0;
 
 .icons {
-margin-top: 20px;
+margin-top: 12px;
 a {
-        padding: 16px 0;
+        padding: 24px 0;
         display: block;
 
     }
         .router-link-active {
-            background-color: #89a7b9;
+            background-color: #91b6ce;
     
         }
 }
@@ -60,7 +60,6 @@ a {
 
   }
 .iconfont {
-
 color: rgb(233, 241, 248);
 
   }

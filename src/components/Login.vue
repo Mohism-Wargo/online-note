@@ -5,14 +5,14 @@
                  <div class="modal-container">
                      <div class="main"></div>
                      <div class="form">
-                        <h3 @click="showLogin">登录</h3>
+                        <h2 @click="showLogin">登录</h2>
                         <div v-show="isShowLogin" class="login">
                             <input type="text" v-model="login.username" placeholder="输入用户名">
                             <input type="password" v-model="login.password" @keyup.enter="onLogin"  placeholder="密码">
                             <p v-bind:class="{error:login.isError}">{{ login.notice }}</p>
                             <div class="button" @click="onLogin"> 登录</div>  
                         </div>
-                        <h3 @click="showRegister">注册</h3>
+                        <h2 @click="showRegister">注册</h2>
                         <div v-show="isShowRegister" class="register">
                              <input type="text" v-model="register.username" placeholder="用户名">
                              <input type="password" v-model="register.password" @keyup.enter="onRegister" placeholder="密码">
@@ -157,11 +157,11 @@ export default {
 }
 
 .modal-container {
-    width: 740px;
-    height: 500px;
+    width: 680px;
+    height: 420px;
     margin: 0px auto;
     background-color: #fff;
-    border-radius: 2px;
+    border-radius: 8px;
     box-shadow: 0 2px 8px rgba(100, 100, 100, 0.33);
     transition: all .3s ease;
     font-family: Helvetica, Arial, sans-serif;
@@ -171,23 +171,26 @@ export default {
         flex: 1;
         background: #1ea4ad url(//img95.699pic.com/xsj/14/3b/4l.jpg!/fh/300) center center no-repeat;
         background-size: contain;
+        border-radius: 8px 0 0 8px;
         
     }
 
     .form {
-        width: 310px;
+        width: 300px;
         background-color: rgb(241, 245, 246);
         border-left: 1px solid rgb(160, 159, 159);
+        border-radius: 0 8px 8px 0;
 
-        h3 {
+        h2 {
+            text-align: center;
             padding: 10px 20px;
-            font-weight: normal;
+            font-weight: bolder;
             font-size: 16px;
-            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
             cursor: pointer;
 
             &:nth-of-type(2) {
-                border-bottom: 1px solid #eee;
+                border-top: 1px solid #eee;
             }
 
         }
